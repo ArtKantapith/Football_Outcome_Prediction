@@ -1,5 +1,4 @@
 import sqlite3
-
 from get_database_connection import get_connection_object
 
 
@@ -9,6 +8,9 @@ def get_formation(match_id, plot_formation = False):
     sql = 'SELECT * From MATCH WHERE id=?'
     cur.execute(sql, (match_id,))
     match = cur.fetchone()
+    if(match == None):
+        return None
+    #print("match", match)
     home_players_api_id = list()
     away_players_api_id = list()
     home_players_x = list()
@@ -25,8 +27,8 @@ def get_formation(match_id, plot_formation = False):
         home_players_y.append(match['home_player_Y%d' % i])
         away_players_y.append(match['away_player_Y%d' % i])
 
-    print('Example, home players api id: ')
-    print(home_players_api_id)
+    #print('Example, home players api id: ')
+    #print(home_players_api_id)
     players_api_id = [home_players_api_id, away_players_api_id]
     players_api_id.append(home_players_api_id)  # Home
     players_api_id.append(away_players_api_id)  # Away
@@ -43,7 +45,7 @@ def get_formation(match_id, plot_formation = False):
             name = player['player_name'].split()[-1]  # keep only the last name
             players_names[i][idx] = name
 
-    print('Home team players names:')
+    #print('Home team players names:')
     print(players_names[0])
     print('Away team players names:')
     print(players_names[1])
@@ -99,7 +101,7 @@ def get_formation(match_id, plot_formation = False):
         formation += '%d' % formation_dict[sorted_keys[-1]]
         formations[i] = formation
 
-    print('Home team formation: ' + formations[0])
-    print('Away team formation: ' + formations[1])
+    #print('Home team formation: ' + formations[0])
+    #print('Away team formation: ' + formations[1])
 
     return formations
