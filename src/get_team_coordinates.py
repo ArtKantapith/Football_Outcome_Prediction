@@ -107,4 +107,4 @@ def get_team_coordinates(conn, match_id, plot_formation = False):
     #print('Home team formation: ' + formations[0])
     #print('Away team formation: ' + formations[1])
 
-    return home_players_x, home_players_y, away_players_x, away_players_y
+    return home_players_x, home_players_y, home_players_api_id, away_players_x, away_players_y, away_players_api_id
