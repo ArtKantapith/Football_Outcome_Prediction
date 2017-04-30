@@ -2,8 +2,7 @@ import sqlite3
 from get_database_connection import get_connection_object
 
 
-def get_team_coordinates(match_id, plot_formation = False):
-    conn = get_connection_object()
+def get_team_coordinates(conn, match_id, plot_formation = False):
     cur = conn.cursor()
     sql = 'SELECT * From MATCH  WHERE id=?'
     cur.execute(sql, (match_id,))
