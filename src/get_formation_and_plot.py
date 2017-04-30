@@ -46,9 +46,9 @@ def get_formation(match_id, plot_formation = False):
             players_names[i][idx] = name
 
     #print('Home team players names:')
-    print(players_names[0])
-    print('Away team players names:')
-    print(players_names[1])
+    #print(players_names[0])
+    #print('Away team players names:')
+    #print(players_names[1])
     home_players_x = [5 if x == 1 else x for x in home_players_x]
     away_players_x = [5 if x == 1 else x for x in away_players_x]
     import matplotlib.pyplot as plt
