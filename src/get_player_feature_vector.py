@@ -11,24 +11,29 @@ def analyze_player(player_id):
 
     conn = get_connection_object()
     player_data = get_player_attributes(conn, player_id)
+    # print player_data
     ran = range(7,len(player_data))
     ran = [5] + ran
+
     feature =[]
     avvector = getAverage()
     for index in ran :
         feature.append(player_data[index])
     for i in xrange(0,len(feature)):
         if i in (1,2):
-            if feature[i] not in ("high","medium","low"):
+            if feature[i] not in (u"high",u"medium",u"low"):
                 feature[i] = 1
         else:
             if feature[i] == None:
                 feature[i] = int(avvector[i])
+    # print feature
+
     for i in (1,2):
-        if feature[i]=="high":
+        if feature[i]==u"high":
             feature[i]=2
-        if feature[i]=="medium":
+        if feature[i]==u"medium":
             feature[i]=1
-        if feature[i]=="medium":
+        if feature[i]==u"low":
             feature[i]=0
     return feature
+analyze_player(39902)
