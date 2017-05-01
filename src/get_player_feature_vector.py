@@ -7,7 +7,7 @@ def getAverage():
     av = eval(string)
     return av
 
-def analyze_player(player_id=31684):
+def analyze_player(player_id):
 
     conn = get_connection_object()
     player_data = get_player_attributes(conn, player_id)
@@ -32,5 +32,3 @@ def analyze_player(player_id=31684):
         if feature[i]=="medium":
             feature[i]=0
     return feature
-
-analyze_player()
