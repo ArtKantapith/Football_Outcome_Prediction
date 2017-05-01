@@ -85,5 +85,5 @@ for (i,id) in enumerate(matchid):
     feature_home,feature_away = aggregate_feature_vectors(id)
     matchdata[i,:] = numpy.concatenate([feature_home,feature_away],axis = 1)
 
-alldata = numpy.concatenate([matchdata,label],axis = 1)
+alldata = numpy.concatenate([matchdata,label.reshape([label.shape[0],1])],axis = 1)
 numpy.savez("alldata.npz",alldata)
