@@ -15,14 +15,10 @@ for idx, feature in enumerate(features_list):
         features_list[idx] = 'midfielders_' + features_list[idx]
     else:
         features_list[idx] = 'strikers_' + features_list[idx]
-features_list = features_list * 2
 
-for idx, feature in enumerate(features_list):
-    if idx/144 == 1:
-        features_list[idx] = 'away_' + features_list[idx]
 print(features_list)
 
-def train_validate_test_split(df, train_percent=.6, validate_percent=.2, seed=100):
+def train_validate_test_split(df, train_percent=.8, validate_percent=0, seed=100):
     np.random.seed(seed)
     perm = np.random.permutation(df.index)
     m = len(df)
@@ -47,9 +43,10 @@ validate_data = np.array(validate_data)
 test_data = np.array(test_data)
 
 
-train_X = train_data[:, :-1]
-validate_X = validate_data[:, :-1]
-test_X = test_data[:, :-1]
+train_X = train_data[:, :144]
+
+validate_X = validate_data[:, :144]
+test_X = test_data[:, :144]
 train_Y = train_data[:,-1]
 validate_Y = validate_data[:,-1]
 test_Y = test_data[:,-1]
@@ -63,7 +60,7 @@ kbest.fit(train_X, train_Y)
 print('training accuracy', kbest.score(train_X, train_Y))
 print('test accuracy', kbest.score(test_X, test_Y))
 print('all coefficients', kbest.coef_)
-best_features = np.argsort(np.abs(kbest.coef_))[::-1].reshape(288)
+best_features = np.argsort(np.abs(kbest.coef_))[::-1].reshape(144)
 #print('15 best features', best_features)
 print(best_features.shape)
 for idx in  best_features:
@@ -71,15 +68,45 @@ for idx in  best_features:
 
 import sklearn.ensemble
 
-random_forest = sklearn.ensemble.RandomForestClassifier(n_estimators=2)
+random_forest = sklearn.ensemble.RandomForestClassifier(n_estimators=10)
 random_forest.fit_transform(train_X, train_Y)
 print('training accuracy', random_forest.score(train_X, train_Y))
 print('test accuracy', random_forest.score(test_X, test_Y))
 print('random_forest features', random_forest.feature_importances_)
 
-
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_val_score
 clf = DecisionTreeClassifier(random_state=0)
-cross_val_score(clf, train_X, train_X, cv=10)
-print("Decision tree accuracy" , cross_val_score(clf, test_X, test_X, cv=10))
+cross_val_score(clf, train_X, train_Y, cv=10)
+print("Decision tree accuracy" , cross_val_score(clf, test_X, test_Y, cv=10))
+'''
+from sklearn.decomposition import PCA
+
+pca = PCA(n_components=25)
+train_mean = np.mean(train_X, axis = 0)
+train_std = np.std(train_X, axis=0)
+train_X = (train_X - train_mean)/train_std
+test_X = (test_X  - train_mean)/train_std
+
+pca.fit_transform(train_X)
+
+print(pca.explained_variance_ratio_)
+#test_X = pca.transform(test_X)
+kbest = sklearn.linear_model.LogisticRegression()
+kbest.fit_transform(train_X, train_Y)
+print('training accuracy after pca', kbest.score(train_X, train_Y))
+print('test accuracy after ', kbest.score(test_X, test_Y))
+print('all coefficients after pca', kbest.coef_)
+best_features = np.argsort(np.abs(kbest.coef_))[::-1].reshape(144)
+#print('15 best features', best_features)
+print(best_features.shape)
+for idx in  best_features:
+    print features_list[idx]
+
+'''
+from sklearn import svm
+clf = svm.SVC()
+clf.fit(train_X, train_Y)
+preds = clf.predict(test_X)
+mask = np.ones(test_Y.shape[0])
+print(np.sum(mask[preds == test_Y]))
