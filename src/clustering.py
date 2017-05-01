@@ -62,19 +62,17 @@ def clusterPlayers(db, match_id):
 
     return home_player_ids, kmeans_home, away_player_ids, kmeans_away
 
-'''
 def aggregate_feature_vectors(db,match_id):
 
     home_player_ids, kmeans_home, away_player_ids, kmeans_away = clusterPlayers(db,match_id)
     feature_home = numpy.zeros([11,36])
     feature_away = numpy.zeros([11,36])
     for (i,home_id) in enumerate(home_player_ids):
-        feature_home[i,:] = numpy.asarray(get_player_feature_vector(home_id))
+        feature_home[i,:] = numpy.asarray(analyze_player(home_id))
     for (i,away_id) in enumerate(away_player_ids):
-        feature_away[i,:] = numpy.asarray(get_player_feature_vector(away_id))
-'''
+        feature_away[i,:] = numpy.asarray(analyze_player(away_id))
 
 db = get_connection_object()
 match_id = 25579
-#aggregate_feature_vectors(db,match_id)
-clusterPlayers(db, 25579)
+aggregate_feature_vectors(db,match_id)
+# clusterPlayers(db, 25579)

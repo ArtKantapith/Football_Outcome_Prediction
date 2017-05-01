@@ -6,5 +6,4 @@ def get_player_attributes(conn, player_id):
     sql += ' WHERE player_api_id IN (' + ','.join(map(str, [player_id])) + ')'
     cur.execute(sql)
     player_data = cur.fetchall()
-    print player_data
-    return player_data
+    return player_data[0]
