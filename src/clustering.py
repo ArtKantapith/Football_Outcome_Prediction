@@ -17,7 +17,7 @@ def clusterPlayers(db, match_id):
     kmeans_away = KMeans(n_clusters=3, random_state=0).fit(away_y[1:].reshape([-1,1]))
 
 
-    centres = kmeans_away.cluster_centers
+    centres = kmeans_away.cluster_centers_
 
     order = [0,1,2]
     if centres[0] <= centres [1 ] and centres[1] <= centres[2]:
@@ -34,9 +34,9 @@ def clusterPlayers(db, match_id):
         order = [2,1,0]
 
 
-    kmeans_away = [ order[x] for x in kmeans_away]
+    kmeans_away = [ order[x] for x in kmeans_away.labels_]
 
-    centres = kmeans_home.cluster_centers
+    centres = kmeans_home.cluster_centers_
 
     order = [0,1,2]
 
@@ -55,13 +55,14 @@ def clusterPlayers(db, match_id):
 
 
 
-    kmeans_home = [ order[x] for x in kmeans_home]
+    kmeans_home = [ order[x] for x in kmeans_home.labels_]
 
     kmeans_home = [3]+kmeans_home
     kmeans_away = [3]+kmeans_away
 
     return home_player_ids, kmeans_home, away_player_ids, kmeans_away
 
+'''
 def aggregate_feature_vectors(db,match_id):
 
     home_player_ids, kmeans_home, away_player_ids, kmeans_away = clusterPlayers(db,match_id)
@@ -71,8 +72,9 @@ def aggregate_feature_vectors(db,match_id):
         feature_home[i,:] = numpy.asarray(get_player_feature_vector(home_id))
     for (i,away_id) in enumerate(away_player_ids):
         feature_away[i,:] = numpy.asarray(get_player_feature_vector(away_id))
+'''
 
-
-db  = sqlite3.connect("../data/database.sqlite")
+db = get_connection_object()
 match_id = 25579
-aggregate_feature_vectors(db,match_id)
+#aggregate_feature_vectors(db,match_id)
+clusterPlayers(db, 25579)
