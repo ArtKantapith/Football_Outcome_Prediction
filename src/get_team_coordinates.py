@@ -17,9 +17,6 @@ def get_team_coordinates(conn, match_id, plot_formation = False):
     home_players_y = list()
     away_players_y = list()
 
-    print("type of match", type(match))
-    print("match", match)
-
     for i in range(1, 12):
         home_players_api_id.append(match['home_player_%d' % i])
         away_players_api_id.append(match['away_player_%d' % i])
