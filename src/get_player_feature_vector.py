@@ -7,7 +7,7 @@ def getAverage():
     av = eval(string)
     return av
 
-def analyze_player(player_id):
+def analyze_player(player_id=31684):
 
     conn = get_connection_object()
     player_data = get_player_attributes(conn, player_id)
@@ -20,8 +20,17 @@ def analyze_player(player_id):
     for i in xrange(0,len(feature)):
         if i in (1,2):
             if feature[i] not in ("high","medium","low"):
-                feature[i] = avvector[i]
+                feature[i] = 1
         else:
             if feature[i] == None:
                 feature[i] = int(avvector[i])
+    for i in (1,2):
+        if feature[i]=="high":
+            feature[i]=2
+        if feature[i]=="medium":
+            feature[i]=1
+        if feature[i]=="medium":
+            feature[i]=0
     return feature
+
+analyze_player()
